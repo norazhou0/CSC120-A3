@@ -4,13 +4,19 @@ import java.util.Random;
 public class Conversation {
 
   /* Integer to store the rounds of conversation */
-  public static Integer round;
+  private Integer round;
   /* Scanner to scan the input */
-  public static Scanner input = new Scanner(System.in);
+  private Scanner input = new Scanner(System.in);
   /* Random to  get a random number */
-  public static Random random = new Random();
+  private Random random = new Random();
   /* A list of strings to store the transcript */
-  public static String transcript = "";
+  public String transcript = "";
+  /* create an array of fixed responses */ 
+  private static String[] fixedResponse = {
+    "Okay.",
+    "Yeah",
+    "Mmm-hm."
+  };
 
   /**
    * Constructor
@@ -20,8 +26,7 @@ public class Conversation {
     round = number;
   }
 
-  /**
-   * Get the rounds of the conversation */ 
+  /* Get the rounds of the conversation */ 
   public void rounds() {
     System.out.println("How many rounds? ");
     // get the number of rounds from the user input
@@ -29,18 +34,14 @@ public class Conversation {
     input.nextLine();
   }
 
-  /**
-   * Mirror input from the user */  
+  /* Mirror input from the user */  
   public void mirror() {
     // create a loop for rounds
     while (round > 0) {
       String userInput = input.nextLine();
       // add user input to the transcript
       transcript += userInput + "\n";
-
-      // create an empty string for storing user responses
       String response = "";
-      // Set replacment to be false
       boolean replacement = false;
       // create a list for splitted words from the response
       String[] words = userInput.split(" ");
@@ -57,6 +58,8 @@ public class Conversation {
         } else if (words[i].equals("am")) {
           words[i] = "are";
           replacement = true;
+        } else if (words[i].equals("are")) {
+          words[i] = "am";
         } else if (words[i].equals("you")) {
           words[i] = "I";
           replacement = true;
@@ -68,18 +71,11 @@ public class Conversation {
           replacement = true;
         }
       }
-
       // check if replacment was made
       if (replacement) {
         // glue words together to response and add an question mark at the end
         response = String.join(" ", words) + "?";
       } else {
-        // create an array of fixed responses
-        String[] fixedResponse = {
-          "Okay.",
-          "Yeah",
-          "Mmm-hm."
-        };
         // get a random index from the list
         int index = random.nextInt(fixedResponse.length);
         // get the selected response
@@ -96,6 +92,7 @@ public class Conversation {
     }
   }
   
+  /* Main method */
   public static void main(String[] arguments) {
     Conversation myConversation = new Conversation(2);
     myConversation.rounds();
@@ -103,7 +100,7 @@ public class Conversation {
     // print a short greeting to start the conversation
     System.out.println("Hi there!  What's on your mind?");
     // add to the transcript
-    transcript += "Hi there!  What's on your mind?" + "\n";
+    myConversation.transcript += "Hi there!  What's on your mind?" + "\n";
 
     // call the mirror function to get responses
     myConversation.mirror();
@@ -111,9 +108,9 @@ public class Conversation {
     // print the ending sentence
     System.out.println("See ya!");
     // add to the transcript
-    transcript += "See ya!" + "\n";
+    myConversation.transcript += "See ya!" + "\n";
 
     // print the transcript
-    System.out.println("\n" + "TRANSCRIPT:" + "\n" + transcript);
+    System.out.println("\n" + "TRANSCRIPT:" + "\n" + myConversation.transcript);
   }
 }
